@@ -48,7 +48,7 @@ func New(sW, sH int) *Game {
 	}
 
 	go func() {
-		time.Sleep(5 * time.Second)
+		time.Sleep(2 * time.Second)
 		g.currentLevel = NewMainScreen(sW, sH)
 	}()
 
