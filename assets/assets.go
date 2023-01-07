@@ -42,6 +42,7 @@ func Turret() image.Image {
 		log.Fatal(err)
 	}
 	return img
+}
 
 func LoadMusic() io.Reader {
 	f, err := os.Open("assets/Doomsayer.mp3")
