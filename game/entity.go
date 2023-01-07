@@ -1,11 +1,14 @@
 package game
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"github.com/hajimehoshi/ebiten/v2"
+	"golang.org/x/image/math/f64"
+)
 
 type entity struct {
-	x   int
-	y   int
-	w   int
-	h   int
-	img *ebiten.Image
+	pos      f64.Vec2
+	w        int
+	h        int
+	img      *ebiten.Image
+	rotation int
 }
