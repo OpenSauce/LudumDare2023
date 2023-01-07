@@ -14,20 +14,20 @@ type Game struct {
 }
 
 func New(sW, sH int) *Game {
-	i := ebiten.NewImageFromImage(assets.PL())
+	i := ebiten.NewImageFromImage(assets.Turtle())
 	w, h := i.Size()
 	return &Game{
 		W: sW,
 		H: sH,
 		bg: &entity{
-			img: ebiten.NewImageFromImage(assets.BG()),
+			img: ebiten.NewImageFromImage(assets.Background()),
 		},
 		pl: &entity{
-			img: ebiten.NewImageFromImage(assets.PL()),
+			img: ebiten.NewImageFromImage(assets.Turtle()),
 			w:   w,
 			h:   h,
 			x:   sW / 4,
-			y:   sH / 2,
+			y:   sH / 4,
 		},
 	}
 }
@@ -49,19 +49,19 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeigh
 
 func (g *Game) updatePlayer() {
 	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-		g.pl.x += 3
+		g.pl.x += 1
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
-		g.pl.x -= 3
+		g.pl.x -= 1
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
-		g.pl.y -= 3
+		g.pl.y -= 1
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		g.pl.y += 3
+		g.pl.y += 1
 	}
 }
 
@@ -83,5 +83,6 @@ func (g *Game) renderBackground(screen *ebiten.Image) {
 func (g *Game) renderPlayer(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(float64(g.pl.x)-float64(g.pl.w)/2, float64(g.pl.y)-float64(g.pl.h)/2)
+	op.GeoM.Scale(2, 2)
 	screen.DrawImage(g.pl.img, op)
 }

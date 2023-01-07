@@ -9,10 +9,10 @@ import (
 	_ "embed"
 )
 
-//go:embed bg.png
+//go:embed background.png
 var bg []byte
 
-func BG() image.Image {
+func Background() image.Image {
 	img, err := png.Decode(bytes.NewReader(bg))
 	if err != nil {
 		log.Fatal(err)
@@ -20,10 +20,10 @@ func BG() image.Image {
 	return img
 }
 
-//go:embed pl.png
+//go:embed turtle.png
 var pl []byte
 
-func PL() image.Image {
+func Turtle() image.Image {
 	img, err := png.Decode(bytes.NewReader(pl))
 	if err != nil {
 		log.Fatal(err)
