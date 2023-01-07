@@ -2,6 +2,7 @@ package game
 
 import (
 	"LudumDare/assets"
+	"LudumDare/entities"
 
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -9,15 +10,15 @@ import (
 type SplashScreen struct {
 	w  int
 	h  int
-	bg *entity
+	bg *entities.Entity
 }
 
 func NewSplashScreen(sW, sH int) *SplashScreen {
 	return &SplashScreen{
 		w: sW,
 		h: sH,
-		bg: &entity{
-			img: ebiten.NewImageFromImage(assets.Splash()),
+		bg: &entities.Entity{
+			Img: ebiten.NewImageFromImage(assets.Splash()),
 		},
 	}
 }
@@ -32,5 +33,5 @@ func (s *SplashScreen) Draw(screen *ebiten.Image) {
 
 func (s *SplashScreen) renderBackground(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
-	screen.DrawImage(s.bg.img, op)
+	screen.DrawImage(s.bg.Img, op)
 }

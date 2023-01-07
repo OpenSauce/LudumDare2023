@@ -2,6 +2,7 @@ package game
 
 import (
 	"LudumDare/assets"
+	"LudumDare/entities"
 	"log"
 	"time"
 
@@ -16,8 +17,8 @@ type leveller interface {
 }
 
 type Game struct {
-	bg *entity
-	pl *entity
+	bg *entities.Entity
+	pl *entities.Entity
 	W  int
 	H  int
 

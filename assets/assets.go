@@ -44,6 +44,17 @@ func Turtle() image.Image {
 	return img
 }
 
+//go:embed enemyx1.png
+var en []byte
+
+func Enemy() image.Image {
+	img, err := png.Decode(bytes.NewReader(en))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return img
+}
+
 //go:embed turret.png
 var turret []byte
 
