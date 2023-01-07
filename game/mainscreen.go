@@ -52,6 +52,7 @@ func (m *MainScreen) Update() error {
 func (m *MainScreen) Draw(screen *ebiten.Image) {
 	m.renderBackground(screen)
 	m.renderPlayer(screen)
+	m.renderTurrets(screen)
 }
 
 func (m *MainScreen) updatePlayer() {
