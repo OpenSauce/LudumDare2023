@@ -2,8 +2,11 @@ package game
 
 import (
 	"LudumDare/assets"
+	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/audio"
+	"github.com/hajimehoshi/ebiten/v2/audio/mp3"
 )
 
 type Game struct {
@@ -14,6 +17,22 @@ type Game struct {
 }
 
 func New(sW, sH int) *Game {
+	audioContext := audio.NewContext(44100)
+
+	d, err := mp3.DecodeWithSampleRate(44100, assets.LoadMusic())
+	if err != nil {
+		log.Fatal("error loading music")
+	}
+
+	p, err := audioContext.NewPlayer(d)
+	if err != nil {
+		log.Fatal("error loading music")
+	}
+
+	p.SetVolume(0.2)
+
+	p.Play()
+
 	i := ebiten.NewImageFromImage(assets.Turtle())
 	w, h := i.Size()
 	return &Game{
