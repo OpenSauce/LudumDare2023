@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"image"
 	"image/png"
+	"io"
 	"log"
+	"os"
 
 	_ "embed"
 )
@@ -40,4 +42,11 @@ func Turret() image.Image {
 		log.Fatal(err)
 	}
 	return img
+
+func LoadMusic() io.Reader {
+	f, err := os.Open("assets/Doomsayer.mp3")
+	if err != nil {
+		log.Fatal("Error loading music")
+	}
+	return f
 }
