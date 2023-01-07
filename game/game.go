@@ -3,17 +3,25 @@ package game
 import (
 	"LudumDare/assets"
 	"log"
+	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/audio/mp3"
 )
 
+type leveller interface {
+	Update() error
+	Draw(screen *ebiten.Image)
+}
+
 type Game struct {
 	bg *entity
 	pl *entity
 	W  int
 	H  int
+
+	currentLevel leveller
 }
 
 func New(sW, sH int) *Game {
@@ -33,75 +41,28 @@ func New(sW, sH int) *Game {
 
 	p.Play()
 
-	i := ebiten.NewImageFromImage(assets.Turtle())
-	w, h := i.Size()
-	return &Game{
-		W: sW,
-		H: sH,
-		bg: &entity{
-			img: ebiten.NewImageFromImage(assets.Background()),
-		},
-		pl: &entity{
-			img: ebiten.NewImageFromImage(assets.Turtle()),
-			w:   w,
-			h:   h,
-			x:   sW / 4,
-			y:   sH / 4,
-		},
+	g := &Game{
+		W:            sW,
+		H:            sH,
+		currentLevel: NewSplashScreen(sW, sH),
 	}
+
+	go func() {
+		time.Sleep(5 * time.Second)
+		g.currentLevel = NewMainScreen(sW, sH)
+	}()
+
+	return g
 }
 
 func (g *Game) Update() error {
-	g.updateBackground()
-	g.updatePlayer()
-	return nil
+	return g.currentLevel.Update()
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	g.renderBackground(screen)
-	g.renderPlayer(screen)
+	g.currentLevel.Draw(screen)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return g.W, g.H
-}
-
-func (g *Game) updatePlayer() {
-	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-		g.pl.x += 1
-	}
-
-	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
-		g.pl.x -= 1
-	}
-
-	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
-		g.pl.y -= 1
-	}
-
-	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		g.pl.y += 1
-	}
-}
-
-func (g *Game) updateBackground() {
-	g.bg.x -= 2
-	g.bg.x %= g.W
-}
-
-func (g *Game) renderBackground(screen *ebiten.Image) {
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(g.bg.x), float64(g.bg.y))
-	screen.DrawImage(g.bg.img, op)
-
-	op = &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(g.bg.x+g.W), float64(g.bg.y))
-	screen.DrawImage(g.bg.img, op)
-}
-
-func (g *Game) renderPlayer(screen *ebiten.Image) {
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(float64(g.pl.x)-float64(g.pl.w)/2, float64(g.pl.y)-float64(g.pl.h)/2)
-	op.GeoM.Scale(2, 2)
-	screen.DrawImage(g.pl.img, op)
 }
