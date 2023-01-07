@@ -30,3 +30,14 @@ func Turtle() image.Image {
 	}
 	return img
 }
+
+//go:embed turret.png
+var turret []byte
+
+func Turret() image.Image {
+	img, err := png.Decode(bytes.NewReader(turret))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return img
+}
