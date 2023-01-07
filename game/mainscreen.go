@@ -142,6 +142,7 @@ func (m *MainScreen) updateProjectiles() {
 
 	for _, dp := range deadProj {
 		delete(m.projectiles, dp)
+		delete(turretsActionTimes, dp)
 	}
 }
 
