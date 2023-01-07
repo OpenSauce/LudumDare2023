@@ -5,15 +5,17 @@ import (
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"golang.org/x/image/math/f64"
 	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/audio/mp3"
 )
 
 type Game struct {
-	bg *entity
-	pl *entity
-	W  int
-	H  int
+	bg      *entity
+	pl      *entity
+	turrets map[*entity]f64.Vec2
+	W       int
+	H       int
 }
 
 func New(sW, sH int) *Game {
@@ -48,18 +50,28 @@ func New(sW, sH int) *Game {
 			x:   sW / 4,
 			y:   sH / 4,
 		},
+		turrets: map[*entity]f64.Vec2{
+			&entity{
+				img: ebiten.NewImageFromImage(assets.Turret()),
+			}: f64.Vec2{0, 0},
+			&entity{
+				img: ebiten.NewImageFromImage(assets.Turret()),
+			}: f64.Vec2{0, -32},
+		},
 	}
 }
 
 func (g *Game) Update() error {
 	g.updateBackground()
 	g.updatePlayer()
+	g.updateTurrets()
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.renderBackground(screen)
 	g.renderPlayer(screen)
+	g.renderTurrets(screen)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
@@ -89,6 +101,13 @@ func (g *Game) updateBackground() {
 	g.bg.x %= g.W
 }
 
+func (g *Game) updateTurrets() {
+	for t, offset := range g.turrets {
+		t.x = g.pl.x + int(offset[0])
+		t.y = g.pl.y + int(offset[1])
+	}
+}
+
 func (g *Game) renderBackground(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(float64(g.bg.x), float64(g.bg.y))
@@ -104,4 +123,13 @@ func (g *Game) renderPlayer(screen *ebiten.Image) {
 	op.GeoM.Translate(float64(g.pl.x)-float64(g.pl.w)/2, float64(g.pl.y)-float64(g.pl.h)/2)
 	op.GeoM.Scale(2, 2)
 	screen.DrawImage(g.pl.img, op)
+}
+
+func (g *Game) renderTurrets(screen *ebiten.Image) {
+	for t, _ := range g.turrets {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(float64(t.x)-float64(t.w)/2, float64(t.y)-float64(t.h)/2)
+		op.GeoM.Scale(2, 2)
+		screen.DrawImage(t.img, op)
+	}
 }
