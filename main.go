@@ -11,8 +11,8 @@ const gameName = "LudumDare"
 func main() {
 	ebiten.SetFullscreen(true)
 	ebiten.SetWindowTitle(gameName)
-	game := game.New()
-	game.W, game.H = ebiten.ScreenSizeInFullscreen()
+	w, h := ebiten.ScreenSizeInFullscreen()
+	game := game.New(w, h)
 	if err := ebiten.RunGame(game); err != nil {
 		panic(err)
 	}
