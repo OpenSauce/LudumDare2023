@@ -57,24 +57,24 @@ func (m *MainScreen) Draw(screen *ebiten.Image) {
 
 func (m *MainScreen) updatePlayer() {
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		m.pl.pos[0] += 1
+		m.pl.pos[0] += 2
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		m.pl.pos[0] -= 1
+		m.pl.pos[0] -= 2
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		m.pl.pos[1] -= 1
+		m.pl.pos[1] -= 2
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		m.pl.pos[1] += 1
+		m.pl.pos[1] += 2
 	}
 }
 
 func (m *MainScreen) updateBackground() {
-	m.bg.pos[0] -= 2
+	m.bg.pos[0] -= 10
 	m.bg.pos[0] = float64(int(m.bg.pos[0]) % m.w)
 }
 
