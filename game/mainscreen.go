@@ -95,6 +95,10 @@ func NewMainScreen(sW, sH int) *MainScreen {
 func (m *MainScreen) Update() error {
 	m.count = (m.count + 1) % 60
 
+	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
+		return fmt.Errorf("force closed game")
+	}
+
 	m.updatePlayer()
 	m.updateBackground()
 	m.updateTurrets()
@@ -116,7 +120,8 @@ func (m *MainScreen) Draw(screen *ebiten.Image) {
 }
 
 func (m *MainScreen) updatePlayer() {
-	if ebiten.IsKeyPressed(ebiten.KeyD) {
+	// TODO: Can't travel out of bounds
+	if ebiten.IsKeyPressed(ebiten.KeyD) || ebiten.IsKeyPressed(ebiten.KeyE) {
 		m.pl.Pos[0] += 2
 	}
 
@@ -124,11 +129,11 @@ func (m *MainScreen) updatePlayer() {
 		m.pl.Pos[0] -= 2
 	}
 
-	if ebiten.IsKeyPressed(ebiten.KeyW) {
+	if ebiten.IsKeyPressed(ebiten.KeyW) || ebiten.IsKeyPressed(ebiten.KeyComma) {
 		m.pl.Pos[1] -= 2
 	}
 
-	if ebiten.IsKeyPressed(ebiten.KeyS) {
+	if ebiten.IsKeyPressed(ebiten.KeyS) || ebiten.IsKeyPressed(ebiten.KeyO) {
 		m.pl.Pos[1] += 2
 	}
 }
