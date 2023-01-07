@@ -22,6 +22,17 @@ func Background() image.Image {
 	return img
 }
 
+//go:embed splash.png
+var sp []byte
+
+func Splash() image.Image {
+	img, err := png.Decode(bytes.NewReader(sp))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return img
+}
+
 //go:embed turtle.png
 var pl []byte
 
