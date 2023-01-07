@@ -55,6 +55,17 @@ func Turret() image.Image {
 	return img
 }
 
+//go:embed projectile.png
+var projectile []byte
+
+func Projectile() image.Image {
+	img, err := png.Decode(bytes.NewReader(projectile))
+	if err != nil {
+		log.Fatal(err)
+	}
+	return img
+}
+
 func LoadMusic() io.Reader {
 	f, err := os.Open("assets/Doomsayer.mp3")
 	if err != nil {

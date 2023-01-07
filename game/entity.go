@@ -6,9 +6,10 @@ import (
 )
 
 type entity struct {
-	pos      f64.Vec2
-	w        int
-	h        int
-	img      *ebiten.Image
-	rotation int
+	pos       f64.Vec2
+	w         int
+	h         int
+	img       *ebiten.Image
+	rotation  int
+	direction f64.Vec2
 }
