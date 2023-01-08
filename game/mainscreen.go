@@ -69,17 +69,17 @@ func NewMainScreen(sW, sH int) *MainScreen {
 			W:     w,
 			H:     h,
 			Pos:   f64.Vec2{float64(sW / 4), float64(sH / 4)},
-			Scale: 2,
+			Scale: 1,
 		},
 		turrets: map[*entities.Entity]f64.Vec2{
 			{
 				Img:   ebiten.NewImageFromImage(assets.Turret()),
 				Scale: 1,
-			}: {10, +22},
+			}: {75, 90},
 			{
 				Img:   ebiten.NewImageFromImage(assets.Turret()),
 				Scale: 1,
-			}: {10, -28},
+			}: {75, 40},
 		},
 		projectiles: map[*entities.Entity]int{},
 		enemies:     map[*entities.Entity]struct{}{},
@@ -150,8 +150,8 @@ func (m *MainScreen) updateTurrets() {
 		t.Pos[0] = m.pl.Pos[0] + offset[0]
 		t.Pos[1] = m.pl.Pos[1] + offset[1]
 
-		xf := float64(x) - t.Pos[0]*2
-		yf := float64(y) - t.Pos[1]*2
+		xf := float64(x) - t.Pos[0]
+		yf := float64(y) - t.Pos[1]
 
 		angle := math.Atan2(yf, xf) * (180 / math.Pi)
 
@@ -160,11 +160,11 @@ func (m *MainScreen) updateTurrets() {
 		turretsActionTimes[t]++
 		if turretsActionTimes[t] >= actionTime && ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 			turretsActionTimes[t] = 0
-			xdir := (t.Pos[0] * 2) - float64(x)
-			ydir := (t.Pos[1] * 2) - float64(y)
+			xdir := (t.Pos[0]) - float64(x)
+			ydir := (t.Pos[1]) - float64(y)
 
 			m.projectiles[&entities.Entity{
-				Pos:       f64.Vec2{t.Pos[0] * 2, t.Pos[1] * 2},
+				Pos:       f64.Vec2{t.Pos[0], t.Pos[1]},
 				Img:       ebiten.NewImageFromImage(assets.Projectile()),
 				Rotation:  t.Rotation,
 				Direction: f64.Vec2{xdir, ydir},
@@ -232,7 +232,7 @@ func (m *MainScreen) renderBackground(screen *ebiten.Image) {
 
 func (m *MainScreen) renderPlayer(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Translate(m.pl.Pos[0]-float64(m.pl.W)/2, m.pl.Pos[1]-float64(m.pl.H)/2)
+	op.GeoM.Translate(m.pl.Pos[0], m.pl.Pos[1])
 	op.GeoM.Scale(m.pl.Scale, m.pl.Scale)
 	screen.DrawImage(m.pl.Img, op)
 }
@@ -246,7 +246,7 @@ func (m *MainScreen) renderTurrets(screen *ebiten.Image) {
 		op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 		op.GeoM.Rotate(float64(t.Rotation%360) * 2 * math.Pi / 360)
 
-		op.GeoM.Translate(t.Pos[0]*2, t.Pos[1]*2)
+		op.GeoM.Translate(t.Pos[0], t.Pos[1])
 		op.GeoM.Scale(t.Scale, t.Scale)
 		screen.DrawImage(t.Img, op)
 	}
@@ -255,10 +255,7 @@ func (m *MainScreen) renderTurrets(screen *ebiten.Image) {
 
 func (m *MainScreen) renderEnemies(screen *ebiten.Image) {
 	for e := range m.enemies {
-		w, h := e.Img.Size()
-
 		op := &ebiten.DrawImageOptions{}
-		op.GeoM.Translate(-float64(w)/2, -float64(h)/2)
 		op.GeoM.Translate(e.Pos[0], e.Pos[1])
 		op.GeoM.Scale(e.Scale, e.Scale)
 		screen.DrawImage(e.Img, op)
